@@ -1,0 +1,17 @@
+# .NET Core build artifacts
+bin/
+obj/
+
+# Visual Studio Code
+.vscode/
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userprefs
+*.vscode
+
+# appsettings
+Pui51AdminApi/appsettings.Development.json
+Pui51AdminApi/appsettings.json
