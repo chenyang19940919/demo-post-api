@@ -1,25 +1,16 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
-WORKDIR /app
+# See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-COPY . /src
 WORKDIR /src
-RUN ls
-RUN dotnet build "demo-post-api.csproj" -c Release -o /app/build
 
-# WORKDIR /src
-# COPY ["demo-post-api/demo-post-api.csproj", "demo-post-api/"]
-# RUN dotnet restore "demo-post-api/demo-post-api.csproj"
-# COPY . .
-# WORKDIR "/src/demo-post-api"
-# RUN dotnet build "demo-post-api.csproj" -c Release -o /app/build
+COPY . .
+RUN dotnet restore
+RUN dotnet build "demo-post-api.csproj" -c Release -o /app/build
 
 FROM build AS publish
 RUN dotnet publish "demo-post-api.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-FROM base AS final
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "demo-post-api.dll"]
